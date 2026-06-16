@@ -73,7 +73,7 @@
     }
     .nav-inner{ display:flex; align-items:center; max-width:var(--page-width); width:100%; }
     a.nav-logo{
-      font-size:27px; font-weight:800; color:var(--main-dark);
+      font-size:34px; font-weight:800; color:var(--main-dark);
       margin-right:auto; letter-spacing:.5px; padding:9px 4px;
       text-decoration:none; display:flex; align-items:center; gap:6px; white-space:nowrap; flex-shrink:0;
     }
@@ -119,13 +119,11 @@
     /* 마스코트 배지 */
     .mini-badge{
       display:inline-flex; align-items:center; justify-content:center;
-      width:30px; height:30px; border-radius:50%;
-      background:linear-gradient(150deg,#8cd4f0,#2ea9d8);
-      border:2px solid #fff; box-shadow:0 2px 6px rgba(46,169,216,.4);
+      width:42px; height:42px;
       flex-shrink:0; vertical-align:middle;
     }
-    .mini-badge.lg{ width:40px; height:40px; }
-    .mini-badge .mc{ width:70%; aspect-ratio:1/1; background:var(--char) center/contain no-repeat; }
+    .mini-badge.lg{ width:54px; height:54px; }
+    .mini-badge .mc{ width:100%; aspect-ratio:1/1; background:var(--char) center/contain no-repeat; }
 
     /* 히어로(프로필) */
     .hero-inner{ display:flex; gap:30px; align-items:center; flex-wrap:wrap; }
@@ -205,6 +203,7 @@
     .tmi-key{ font-size:12.5px; color:var(--soft); font-weight:700; display:block; margin-bottom:5px; }
     .tmi-val{ background:var(--main-light); color:var(--main-dark); border-radius:999px; padding:5px 15px; font-size:14.5px; font-weight:600; }
     .tmi-val:empty{ display:none; }
+    .tmi-vals{ display:flex; flex-wrap:wrap; gap:6px; }
 
     /* 링크 */
     .link-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; }
@@ -249,7 +248,7 @@
 
     /* 모바일 */
     @media (max-width:560px){
-      a.nav-logo{ font-size:22px; padding:9px 2px; }
+      a.nav-logo{ font-size:28px; padding:9px 2px; }
       .nav{ padding:0 6px; }
       .nav a{ padding:14px 8px; font-size:13px; }
       .inquiry-btn{ top:10px; right:10px; padding:6px 12px; font-size:12px; }
@@ -344,10 +343,10 @@
 
   <!-- 좋아 / 싫어 -->
   <div class="card">
-    <div class="card-head"><span class="head-accent"></span>💗 좋아하는 것 · 싫어하는 것</div>
+    <div class="card-head"><span class="head-accent"></span>💙 좋아하는 것 · 싫어하는 것</div>
     <div class="like-block">
       <div class="like-row">
-        <span class="like-label">💗 좋아</span>
+        <span class="like-label">💙 좋아</span>
         <span class="tag" id="like1">국밥</span>
         <span class="tag" id="like2">따뜻한 거</span>
         <span class="tag" id="like3">햄스터</span>
@@ -367,15 +366,15 @@
     <div class="tmi-list">
       <div class="tmi-row">
         <span class="tmi-ic">🍚</span>
-        <div><span class="tmi-key">최애 음식</span><span class="tmi-val" id="tmi-food">국밥 (특 곱빼기)</span></div>
+        <div><span class="tmi-key">최애 음식</span><span class="tmi-vals" id="tmi-food"></span></div>
       </div>
       <div class="tmi-row">
         <span class="tmi-ic">🎵</span>
-        <div><span class="tmi-key">요즘 듣는 노래</span><span class="tmi-val" id="tmi-song">아이유 - 밤편지</span></div>
+        <div><span class="tmi-key">요즘 듣는 노래</span><span class="tmi-vals" id="tmi-song"></span></div>
       </div>
       <div class="tmi-row">
         <span class="tmi-ic">🎮</span>
-        <div><span class="tmi-key">요즘 하는 게임</span><span class="tmi-val" id="tmi-game">스타듀밸리</span></div>
+        <div><span class="tmi-key">요즘 하는 게임</span><span class="tmi-vals" id="tmi-game"></span></div>
       </div>
     </div>
   </div>
@@ -431,7 +430,7 @@
     'sched2-date':'매주 화·목·토', 'sched2-title':'💙 정규 방송 · 저녁 8시',
     like1:'국밥', like2:'따뜻한 거', like3:'햄스터', like4:'칭찬 듣기',
     dislike1:'추운 거', dislike2:'무례한 말',
-    'tmi-food':'국밥 (특 곱빼기)', 'tmi-song':'아이유 - 밤편지', 'tmi-game':'스타듀밸리',
+    'tmi-food':'국밥, 라면, 떡볶이', 'tmi-song':'아이유 - 밤편지', 'tmi-game':'스타듀밸리, 마인크래프트',
     'link-youtube':'#', 'link-mfancim':'#', 'link-fancim':'#',
     'link-soop':'https://www.sooplive.com/station/1020118', 'link-heart':'#',
     avatar:'', 'soop-id':SOOP_ID,
@@ -485,11 +484,14 @@
       const v = (d[id]||'').trim(); el.textContent = v; el.style.display = v ? '' : 'none';
     });
 
-    // TMI (빈 값은 줄 숨김)
+    // TMI (쉼표로 나눠 여러 칩, 빈 값은 줄 숨김)
     ['tmi-food','tmi-song','tmi-game'].forEach(id => {
       const el = document.getElementById(id); if(!el) return;
-      const v = (d[id]||'').trim(); el.textContent = v;
-      const row = el.closest('.tmi-row'); if(row) row.style.display = v ? '' : 'none';
+      const v = (d[id]||'').trim();
+      const row = el.closest('.tmi-row');
+      if(!v){ if(row) row.style.display='none'; el.innerHTML=''; return; }
+      if(row) row.style.display='';
+      el.innerHTML = v.split(',').map(x=>x.trim()).filter(Boolean).map(x=>`<span class="tmi-val">${esc(x)}</span>`).join('');
     });
 
     // 링크 (값이 #이 아니면 연결)

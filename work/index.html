@@ -24,7 +24,7 @@
     }
     .viewer-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-hover); border-color:var(--main); }
     .viewer-av { width:62px; height:62px; border-radius:50%; object-fit:cover; margin:0 auto 10px; display:block; border:3px solid var(--main-light); background:var(--main-light); }
-    .viewer-av-fb { width:62px; height:62px; border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#ffd6e0,#ffb6c8); color:#fff; font-size:24px; font-weight:700; border:3px solid var(--main-light); }
+    .viewer-av-fb { width:62px; height:62px; border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#9fdcf2,#5bc4ea); color:#fff; font-size:24px; font-weight:700; border:3px solid var(--main-light); }
     .viewer-nick { font-size:14px; font-weight:700; color:var(--text); }
     .viewer-id { font-size:11px; color:var(--text-soft); margin:2px 0 8px; }
     .viewer-total { display:inline-block; background:var(--main); color:#fff; border-radius:999px; padding:3px 14px; font-size:12px; font-weight:700; }
@@ -34,12 +34,12 @@
     .modal {
       background:#fff; border-radius:22px; width:100%; max-width:420px;
       max-height:84vh; display:flex; flex-direction:column; overflow:hidden;
-      box-shadow:0 20px 60px rgba(255,100,150,0.3); animation:pop .22s ease;
+      box-shadow:0 20px 60px rgba(63,191,230,0.3); animation:pop .22s ease;
     }
     @keyframes pop { from{ transform:scale(.94); opacity:0;} to{ transform:scale(1); opacity:1;} }
     .modal-top { display:flex; align-items:center; gap:12px; padding:20px 22px 16px; border-bottom:1px solid var(--main-light); position:relative; }
     .modal-av { width:52px; height:52px; border-radius:50%; object-fit:cover; border:3px solid var(--main-light); background:var(--main-light); flex-shrink:0; }
-    .modal-av-fb { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#ffd6e0,#ffb6c8); color:#fff; font-size:20px; font-weight:700; border:3px solid var(--main-light); flex-shrink:0; }
+    .modal-av-fb { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#9fdcf2,#5bc4ea); color:#fff; font-size:20px; font-weight:700; border:3px solid var(--main-light); flex-shrink:0; }
     .modal-nick { font-size:18px; font-weight:800; color:var(--main-dark); line-height:1.2; }
     .modal-id { font-size:12px; color:var(--text-soft); }
     .modal-x { position:absolute; top:16px; right:18px; background:none; border:none; font-size:22px; color:var(--text-soft); cursor:pointer; line-height:1; }

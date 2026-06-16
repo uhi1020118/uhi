@@ -39,9 +39,9 @@ body.dark {
   --main-light:  #143544;
   --bg:     #0e1418;
   --card:   #161f25;
-  --text:        #f3e3ea;
-  --text-soft:   #b08a99;
-  --text-mid:    #c9a7b5;
+  --text:        #dceef6;
+  --text-soft:   #7fa9bd;
+  --text-mid:    #9fc0d0;
   --white:       #1f1a1d;
   --shadow:      0 4px 24px rgba(0, 0, 0, 0.5);
   --shadow-hover:0 8px 32px rgba(0, 0, 0, 0.6);
@@ -69,7 +69,7 @@ body.dark .theme-switch .knob { top: 14px; background: #161f25; }
 
 /* 다크모드 고정색 요소 보정 */
 body.dark .nav { background: rgba(14,20,24,0.9); }
-body.dark footer { color: #f3e3ea !important; }
+body.dark footer { color: #dceef6 !important; }
 body.dark .input { background: var(--card); color: var(--text); }
 body.dark .page-btn { background: var(--card); color: var(--text); }
 body.dark .badge-white { background: var(--card); }
