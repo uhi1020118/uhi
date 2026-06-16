@@ -20,8 +20,8 @@
     .cal-cell:nth-child(7n) { border-right:none; }
     .cal-cell.other { opacity:.35; }
     .cal-cell.has { cursor:pointer; }
-    .cal-cell.has:hover { background:#fff5f8; }
-    .cal-cell.today { background:#fff5f8; }
+    .cal-cell.has:hover { background:#eef7fc; }
+    .cal-cell.today { background:#eef7fc; }
     .cal-cell.today .cal-date { background:var(--main); color:#fff; border-radius:50%; width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; }
     .cal-cell.hl { box-shadow:inset 0 0 0 2px var(--main); border-radius:8px; }
     .cal-date { font-size:13px; font-weight:700; color:var(--text-mid); padding:1px 3px; }
@@ -53,10 +53,10 @@
     @keyframes pop { from{transform:scale(.95);opacity:0} to{transform:scale(1);opacity:1} }
     .m-date { font-size:14px; color:var(--text-soft); margin-bottom:6px; }
     .m-badge { display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; margin-bottom:14px; }
-    .m-part { background:#fff5f8; border:1px solid var(--main-light); border-radius:12px; padding:12px 14px; margin-bottom:8px; }
+    .m-part { background:#eef7fc; border:1px solid var(--main-light); border-radius:12px; padding:12px 14px; margin-bottom:8px; }
     .m-part .pt { font-size:12px; font-weight:700; color:var(--main-dark); }
     .m-part .pn { font-size:15px; font-weight:600; color:var(--text); margin-top:2px; }
-    .m-desc { font-size:13px; color:var(--text-mid); background:#fff5f8; border-radius:12px; padding:11px 14px; margin-bottom:8px; white-space:pre-wrap; }
+    .m-desc { font-size:13px; color:var(--text-mid); background:#eef7fc; border-radius:12px; padding:11px 14px; margin-bottom:8px; white-space:pre-wrap; }
     .m-close { width:100%; padding:12px; border-radius:12px; border:none; background:var(--main-light); color:var(--main-dark); font-size:14px; font-weight:700; cursor:pointer; margin-top:6px; }
 
     @media (max-width:560px){
@@ -75,11 +75,11 @@
     body.dark .calendar { background: var(--card); }
     body.dark .cal-nav { background: var(--card); color: var(--text); }
     body.dark .cal-cell.has:hover,
-    body.dark .cal-cell.today { background: #2a2024; }
+    body.dark .cal-cell.today { background: #1b2a33; }
     body.dark .up-item { background: var(--card); }
     body.dark .modal { background: var(--card); }
     body.dark .m-part,
-    body.dark .m-desc { background: #2a2024; }
+    body.dark .m-desc { background: #1b2a33; }
   </style>
 </head>
 <body>

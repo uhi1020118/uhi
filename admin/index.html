@@ -219,7 +219,7 @@
       .subpanel { display:none; } .subpanel.active { display:block; }
       .vbtn { background:var(--main-light); color:var(--main-dark); border:none; padding:5px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; }
       .vbtn:hover { background:var(--main); color:#fff; }
-      .vbtn.del { background:#ffe3ea; color:#e0507a; } .vbtn.del:hover { background:#e0507a; color:#fff; }
+      .vbtn.del { background:#ffe0e0; color:#e05; } .vbtn.del:hover { background:#e05; color:#fff; }
       .vrow { display:flex; align-items:center; gap:8px; padding:11px 14px; background:#fff; border:1px solid var(--main-light); border-radius:12px; margin-bottom:8px; }
       .vrow .vn { flex:1; font-size:14px; font-weight:600; color:var(--text); }
       .vrow .vid { font-size:12px; color:var(--text-soft); }
@@ -503,7 +503,7 @@
     if (!data.length) { t.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#ccc;padding:20px">없음</td></tr>'; return; }
     t.innerHTML = data.map(s => {
       const isOff = s.type === '휴방';
-      const badge = isOff ? '<span class="badge" style="background:#ffe0eb;color:#d95f7f">휴방</span>' : '<span class="badge" style="background:#d6f0e4;color:#1f7a52">방송</span>';
+      const badge = isOff ? '<span class="badge" style="background:#e7eef2;color:#5f7d8c">휴방</span>' : '<span class="badge" style="background:#d6f0e4;color:#1f7a52">방송</span>';
       return `<tr><td>${s.date}</td><td>${s.time||'-'}</td><td>${badge}</td><td>${s.title||'-'}</td><td><button class="delete-btn" onclick="del('schedule',${s.id},loadSchedule)">🗑</button></td></tr>`;
     }).join('');
   }
