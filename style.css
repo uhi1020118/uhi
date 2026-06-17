@@ -72,7 +72,7 @@ body.dark .theme-switch .knob { top: 14px; background: #161f25; }
 
 /* 다크모드 고정색 요소 보정 */
 body.dark .nav { background: rgba(14,20,24,0.9); }
-body.dark footer { color: #dceef6 !important; }
+body.dark footer { color: #9fc3d4 !important; }
 body.dark .input { background: var(--card); color: var(--text); }
 body.dark .page-btn { background: var(--card); color: var(--text); }
 body.dark .badge-white { background: var(--card); }
