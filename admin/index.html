@@ -22,6 +22,9 @@
     .delete-btn { background: none; border: none; cursor: pointer; color: #ccc; font-size: 16px; padding: 4px 8px; border-radius: 6px; transition: color 0.2s; }
     .delete-btn:hover { color: #e05; }
     .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--main-light); display: none; }
+    .ord-btn { width: 22px; height: 18px; line-height: 1; padding: 0; border: 1px solid var(--main-light); background: var(--card); color: var(--main-dark); border-radius: 5px; font-size: 9px; cursor: pointer; transition: background .2s; }
+    .ord-btn:hover:not(:disabled) { background: var(--main-light); }
+    .ord-btn:disabled { opacity: .3; cursor: default; }
   </style>
 </head>
 <body>
@@ -328,9 +331,12 @@
       <div class="card-title">👗 옷장 항목 추가</div>
       <div class="form-grid">
         <div class="form-field"><label class="input-label">분류</label>
-          <select class="input" id="dr-cat"><option value="hair">헤어</option><option value="lens">렌즈</option><option value="outfit">의상</option></select>
+          <select class="input" id="dr-cat"><option value="white">화이트</option><option value="black">블랙</option><option value="outfit">의상</option><option value="lens">렌즈</option></select>
         </div>
-        <div class="form-field"><label class="input-label">이름 *</label><input class="input" id="dr-name" placeholder="예: 기본 헤어"></div>
+        <div class="form-field"><label class="input-label">순서 (작을수록 앞 · 비우면 맨 뒤)</label>
+          <input class="input" id="dr-order" type="number" min="0" placeholder="비워두면 맨 뒤">
+        </div>
+        <div class="form-field full"><label class="input-label">이름 *</label><input class="input" id="dr-name" placeholder="예: 화이트 드레스"></div>
         <div class="form-field full"><label class="input-label">설명 (선택)</label><input class="input" id="dr-desc" placeholder="짧은 설명"></div>
         <div class="form-field full">
           <label class="input-label">이미지 링크 (주소 붙여넣기)</label>
@@ -771,34 +777,87 @@
   }
 
   // ── 옷장 ──
+  let dressCache = [];
+  const DRESS_CATS = [['white','화이트'],['black','블랙'],['outfit','의상'],['lens','렌즈']];
+  const dressByOrder = (a,b)=> ((a.sort_order||0)-(b.sort_order||0)) || (new Date(a.created_at)-new Date(b.created_at));
+
   async function loadDress(){
-    const data = await fetchAll('dress_items', { order:'created_at', asc:false });
+    dressCache = await fetchAll('dress_items', { order:'created_at', asc:true }) || [];
     const el = document.getElementById('dress-list');
     if(!el) return;
-    if(!data.length){ el.innerHTML = '<div style="text-align:center;color:#ccc;padding:20px">없음</div>'; return; }
-    const L = { hair:'헤어', lens:'렌즈', outfit:'의상' };
-    el.innerHTML = data.map(d => `
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fff;border:1px solid var(--main-light);border-radius:10px;margin-bottom:7px">
-        <div style="width:46px;height:46px;border-radius:8px;background:var(--bg) center/cover no-repeat;flex-shrink:0;${d.image_url?`background-image:url('${d.image_url}')`:''}"></div>
-        <span style="font-size:11px;font-weight:700;color:#fff;background:var(--main);padding:2px 8px;border-radius:999px">${L[d.category]||d.category}</span>
+    if(!dressCache.length){ el.innerHTML = '<div style="text-align:center;color:#ccc;padding:20px">없음</div>'; return; }
+
+    const row = (d, i, len) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border:1px solid var(--main-light);border-radius:10px;margin-bottom:7px">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <button class="ord-btn" onclick="moveDress('${d.id}',-1)" ${i===0?'disabled':''} title="위로">▲</button>
+          <button class="ord-btn" onclick="moveDress('${d.id}',1)" ${i===len-1?'disabled':''} title="아래로">▼</button>
+        </div>
+        <div style="width:42px;height:56px;border-radius:7px;background:var(--bg) center/cover no-repeat;flex-shrink:0;${d.image_url?`background-image:url('${(d.image_url||'').replace(/'/g,'%27')}')`:''}"></div>
         <span style="flex:1;font-size:14px;font-weight:600">${(d.name||'').replace(/</g,'&lt;')}</span>
         <button class="delete-btn" onclick="del('dress_items','${d.id}',loadDress)">🗑</button>
-      </div>`).join('');
+      </div>`;
+
+    let html = '';
+    DRESS_CATS.forEach(([key,label])=>{
+      const arr = dressCache.filter(d=>d.category===key).sort(dressByOrder);
+      if(!arr.length) return;
+      html += `<div style="font-size:12px;font-weight:700;color:var(--main);margin:14px 0 7px;letter-spacing:.05em">${label} <span style="color:var(--text-soft);font-weight:500">· ${arr.length}개</span></div>`;
+      html += arr.map((d,i)=>row(d,i,arr.length)).join('');
+    });
+
+    // 알 수 없는(예: 기존 '헤어') 분류도 보여줘서 잃어버리지 않게
+    const known = DRESS_CATS.map(c=>c[0]);
+    const other = dressCache.filter(d=>!known.includes(d.category)).sort(dressByOrder);
+    if(other.length){
+      html += `<div style="font-size:12px;font-weight:700;color:var(--text-soft);margin:16px 0 7px;letter-spacing:.05em">기타 분류 <span style="font-weight:500">· ${other.length}개</span></div>`;
+      html += other.map(d=>`
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border:1px dashed var(--main-light);border-radius:10px;margin-bottom:7px;opacity:.85">
+          <span style="font-size:11px;font-weight:700;color:#fff;background:var(--text-soft);padding:2px 8px;border-radius:999px">${(d.category||'?')}</span>
+          <span style="flex:1;font-size:14px;font-weight:600">${(d.name||'').replace(/</g,'&lt;')}</span>
+          <button class="delete-btn" onclick="del('dress_items','${d.id}',loadDress)">🗑</button>
+        </div>`).join('');
+    }
+    el.innerHTML = html;
+  }
+
+  // ↑/↓ 순서 변경 (같은 분류 안에서 자리 바꾸기 → 0,1,2…로 다시 매김)
+  async function moveDress(id, dir){
+    const item = dressCache.find(d=>d.id===id);
+    if(!item) return;
+    const arr = dressCache.filter(d=>d.category===item.category).sort(dressByOrder);
+    const i = arr.findIndex(d=>d.id===id);
+    const j = i + dir;
+    if(j<0 || j>=arr.length) return;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    showToast('↕ 순서 변경 중...');
+    await Promise.all(arr.map((d,idx)=> updateRow('dress_items', d.id, { sort_order: idx })));
+    loadDress();
   }
   async function addDressItem(){
     const name = document.getElementById('dr-name').value.trim();
     if(!name){ showToast('❗ 이름 필수!'); return; }
+    const cat = document.getElementById('dr-cat').value;
     const image_url = document.getElementById('dr-url').value.trim();
     const badges = document.getElementById('dr-new').checked ? [{label:'NEW'}] : [];
+    const orderRaw = (document.getElementById('dr-order').value||'').trim();
+    let sort_order;
+    if(orderRaw !== ''){
+      sort_order = parseInt(orderRaw,10); if(isNaN(sort_order)) sort_order = 0;
+    } else {
+      const inCat = dressCache.filter(d=>d.category===cat);
+      sort_order = inCat.length ? Math.max(...inCat.map(d=>d.sort_order||0)) + 1 : 0;
+    }
     const ok = await insertRow('dress_items', {
-      category: document.getElementById('dr-cat').value,
+      category: cat,
       name, description: document.getElementById('dr-desc').value.trim(),
-      image_url, badges
+      image_url, badges, sort_order
     });
     if(ok){
       showToast('✅ 추가됐어요!');
       document.getElementById('dr-name').value=''; document.getElementById('dr-desc').value='';
       document.getElementById('dr-url').value=''; document.getElementById('dr-new').checked=false;
+      document.getElementById('dr-order').value='';
       document.getElementById('dr-preview').innerHTML='';
       loadDress();
     } else showToast('❌ 추가 실패 (통합 SQL 다시 Run 했는지 확인)');
