@@ -332,7 +332,15 @@
         </div>
         <div class="form-field"><label class="input-label">이름 *</label><input class="input" id="dr-name" placeholder="예: 기본 헤어"></div>
         <div class="form-field full"><label class="input-label">설명 (선택)</label><input class="input" id="dr-desc" placeholder="짧은 설명"></div>
-        <div class="form-field full"><label class="input-label">이미지 (자동 압축됨)</label><input type="file" id="dr-file" accept="image/*" class="input"></div>
+        <div class="form-field full">
+          <label class="input-label">이미지 링크 (주소 붙여넣기)</label>
+          <input class="input" id="dr-url" placeholder="https://stimg.sooplive.com/.../xxxx.png" oninput="drPreview()">
+          <div style="font-size:11px;color:var(--text-soft);margin-top:5px;line-height:1.6">
+            SOOP 게시판에 이미지를 올린 뒤 <b>이미지 우클릭 → "이미지 주소 복사"</b> 해서 붙여넣으세요.<br>
+            (글 주소가 아니라 <b>.png/.jpg 로 끝나는 직접 이미지 주소</b>) · 권장 비율 <b>세로 3:4</b> (예: 900×1200)
+          </div>
+          <div id="dr-preview" style="margin-top:8px"></div>
+        </div>
         <div class="form-field full"><label><input type="checkbox" id="dr-new"> ✨ NEW 뱃지 달기</label></div>
         <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addDressItem()">+ 추가</button></div>
       </div>
@@ -780,13 +788,7 @@
   async function addDressItem(){
     const name = document.getElementById('dr-name').value.trim();
     if(!name){ showToast('❗ 이름 필수!'); return; }
-    const file = document.getElementById('dr-file').files[0];
-    let image_url = '';
-    if(file){
-      showToast('🖼 사진 업로드 중...');
-      image_url = await uploadImage(file, 'dress') || '';
-      if(!image_url){ showToast('❌ 사진 업로드 실패 (8번 SQL 실행했는지 확인)'); return; }
-    }
+    const image_url = document.getElementById('dr-url').value.trim();
     const badges = document.getElementById('dr-new').checked ? [{label:'NEW'}] : [];
     const ok = await insertRow('dress_items', {
       category: document.getElementById('dr-cat').value,
@@ -796,9 +798,18 @@
     if(ok){
       showToast('✅ 추가됐어요!');
       document.getElementById('dr-name').value=''; document.getElementById('dr-desc').value='';
-      document.getElementById('dr-file').value=''; document.getElementById('dr-new').checked=false;
+      document.getElementById('dr-url').value=''; document.getElementById('dr-new').checked=false;
+      document.getElementById('dr-preview').innerHTML='';
       loadDress();
-    } else showToast('❌ 추가 실패 (7번 SQL 실행했는지 확인)');
+    } else showToast('❌ 추가 실패 (통합 SQL 다시 Run 했는지 확인)');
+  }
+  function drPreview(){
+    const u = (document.getElementById('dr-url').value||'').trim();
+    const box = document.getElementById('dr-preview');
+    if(!box) return;
+    box.innerHTML = u
+      ? `<img src="${u.replace(/"/g,'&quot;')}" alt="미리보기" style="width:96px;height:128px;object-fit:cover;border-radius:8px;border:1px solid var(--main-light)" onerror="this.style.display='none'">`
+      : '';
   }
 </script>
 </body>
