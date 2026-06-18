@@ -51,6 +51,12 @@
     .empty { text-align:center; padding:56px 0; color:var(--text-soft); }
     .empty-icon { font-size:44px; margin-bottom:10px; opacity:.5; }
 
+    /* ── 페이지네이션 (① ② ③) ── */
+    .dress-pager { display:flex; justify-content:center; gap:6px; margin-top:24px; flex-wrap:wrap; }
+    .pg { width:34px; height:34px; border-radius:50%; border:1.5px solid var(--main-light); background:var(--card); color:var(--text-mid); font-size:13px; font-weight:600; cursor:pointer; transition:all var(--transition); display:flex; align-items:center; justify-content:center; }
+    .pg:hover { border-color:var(--main); }
+    .pg.active { background:var(--main); color:#fff; border-color:var(--main); }
+
     /* ── 라이트박스 (클릭 확대) ── */
     .lightbox { position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:600; padding:24px; }
     .lightbox.open { display:flex; }
@@ -77,12 +83,8 @@
 <div class="container stagger">
   <div class="card">
     <div class="dress-head"><span class="ico">👗</span><span class="t">옷장</span></div>
-    <div class="dress-sub">우히의 헤어 · 렌즈 · 의상 모음이에요. 이미지를 누르면 크게 볼 수 있어요</div>
-    <div class="cat-tabs" id="cat-tabs">
-      <button class="cat-tab active" data-cat="hair" onclick="filterCat('hair',this)">헤어 <span class="cnt">0</span></button>
-      <button class="cat-tab" data-cat="lens" onclick="filterCat('lens',this)">렌즈 <span class="cnt">0</span></button>
-      <button class="cat-tab" data-cat="outfit" onclick="filterCat('outfit',this)">의상 <span class="cnt">0</span></button>
-    </div>
+    <div class="dress-sub">우히의 화이트 · 블랙 · 의상 · 렌즈를 확인해요. 이미지를 누르면 크게 볼 수 있어요</div>
+    <div class="cat-tabs" id="cat-tabs"></div>
     <div id="dress-body"><div class="spinner"></div></div>
   </div>
 </div>
@@ -103,36 +105,57 @@
 <script src="../supabase.js"></script>
 <script>
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  const LABELS = { hair:'헤어', lens:'렌즈', outfit:'의상' };
+
+  // ── 카테고리 설정 (순서·이름을 여기서 바꾸면 끝) ──
+  const CATS = [
+    { key:'white',  label:'화이트' },
+    { key:'black',  label:'블랙'  },
+    { key:'outfit', label:'의상'  },
+    { key:'lens',   label:'렌즈'  },
+  ];
+  const LABELS = Object.fromEntries(CATS.map(c => [c.key, c.label]));
+  const PER_PAGE = 8;
+
   let allItems = [];
-  let curCat = 'hair';
+  let curCat = CATS[0].key;
+  let curPage = 1;
 
   async function load(){
     try {
       const { data } = await db.from('dress_items').select('*').order('sort_order').order('created_at');
       allItems = data || [];
     } catch(e) { allItems = []; }
-    updateCounts();
+    buildTabs();
     render();
   }
 
-  function updateCounts(){
-    document.querySelectorAll('.cat-tab').forEach(t=>{
-      const c = t.dataset.cat;
-      const n = allItems.filter(i => i.category === c).length;
-      const cnt = t.querySelector('.cnt');
-      if (cnt) cnt.textContent = n;
+  function catItems(key){ return allItems.filter(i => i.category === key); }
+
+  function buildTabs(){
+    const wrap = document.getElementById('cat-tabs');
+    wrap.innerHTML = '';
+    CATS.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'cat-tab' + (c.key === curCat ? ' active' : '');
+      b.dataset.cat = c.key;
+      b.innerHTML = `${esc(c.label)} <span class="cnt">${catItems(c.key).length}</span>`;
+      b.onclick = () => { curCat = c.key; curPage = 1; buildTabs(); render(); };
+      wrap.appendChild(b);
     });
   }
 
   function render(){
     const body = document.getElementById('dress-body');
-    const items = allItems.filter(i => i.category === curCat);
+    const items = catItems(curCat);
     if (!items.length){
-      body.innerHTML = '<div class="empty"><div class="empty-icon">👗</div>' + LABELS[curCat] + ' 항목이 아직 없어요</div>';
+      body.innerHTML = '<div class="empty"><div class="empty-icon">👗</div>' + (LABELS[curCat]||'') + ' 항목이 아직 없어요</div>';
       return;
     }
-    body.innerHTML = '<div class="item-grid">' + items.map((item, idx) => {
+    const totalPages = Math.max(1, Math.ceil(items.length / PER_PAGE));
+    if (curPage > totalPages) curPage = 1;
+    const pageItems = items.slice((curPage-1)*PER_PAGE, curPage*PER_PAGE);
+
+    const grid = '<div class="item-grid">' + pageItems.map((item, idx) => {
       const badges = (item.badges||[]).map(b => `<span class="badge">${esc(b.label||b)}</span>`).join('');
       const hasImg = !!item.image_url;
       const inner = hasImg
@@ -149,19 +172,24 @@
       </div>`;
     }).join('') + '</div>';
 
+    let pager = '';
+    if (totalPages > 1){
+      pager = '<div class="dress-pager">';
+      for (let i=1;i<=totalPages;i++) pager += `<button class="pg${i===curPage?' active':''}" data-pg="${i}">${i}</button>`;
+      pager += '</div>';
+    }
+
+    body.innerHTML = grid + pager;
+
     body.querySelectorAll('.item-card').forEach(card => {
       card.addEventListener('click', () => {
-        const it = items[+card.dataset.idx];
+        const it = pageItems[+card.dataset.idx];
         if (it && it.image_url) openLb(it);
       });
     });
-  }
-
-  function filterCat(cat, el){
-    curCat = cat;
-    document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
-    el.classList.add('active');
-    render();
+    body.querySelectorAll('.pg').forEach(btn => {
+      btn.addEventListener('click', () => { curPage = +btn.dataset.pg; render(); window.scrollTo(0,0); });
+    });
   }
 
   function openLb(item){
