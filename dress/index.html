@@ -3,106 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>우히 · 옷장</title>
-  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/10/1020118/1020118.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <title>한자리 · 옷장</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ap/apple100l/apple100l.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.min.css">
   <link rel="stylesheet" href="../style.css">
   <style>
-    /* ── 헤더 ── */
-    .dress-head { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
-    .dress-head .ico { font-size:24px; }
-    .dress-head .t { font-size:23px; font-weight:800; color:var(--main-dark); }
-    .dress-sub { font-size:13px; color:var(--text-soft); margin-bottom:18px; line-height:1.6; }
-
-    /* ── 분류 탭 (개수 뱃지 포함) ── */
-    .cat-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
-    .cat-tab { display:inline-flex; align-items:center; gap:7px; padding:9px 17px; border-radius:999px; border:1.5px solid var(--main-light); background:var(--card); color:var(--main-dark); font-size:14px; font-weight:600; cursor:pointer; transition:all var(--transition); }
-    .cat-tab:hover { border-color:var(--main); }
-    .cat-tab.active { background:var(--main); color:#fff; border-color:var(--main); box-shadow:var(--shadow); }
-    .cat-tab .cnt { font-size:11px; font-weight:700; min-width:18px; height:18px; padding:0 5px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; background:var(--main-light); color:var(--main-dark); }
-    .cat-tab.active .cnt { background:rgba(255,255,255,.28); color:#fff; }
-
-    /* ── 갤러리 그리드: 세로 3:4, 4칸 (반응형 4→3→2) ── */
-    .item-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-    @media (max-width:900px){ .item-grid { grid-template-columns:repeat(3,1fr); gap:13px; } }
-    @media (max-width:560px){ .item-grid { grid-template-columns:repeat(2,1fr); gap:11px; } }
-
-    .item-card { position:relative; border-radius:var(--radius-md); overflow:hidden; cursor:pointer; background:var(--bg); border:1.5px solid var(--main-light); aspect-ratio:3/4; transition:transform var(--transition), box-shadow var(--transition); }
-    .item-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-hover); }
-    .item-card img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
-    .item-card:hover img { transform:scale(1.05); }
-    .item-card .ph { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:42px; opacity:.32; }
-
-    /* 이름 오버레이 (이미지 하단 그라데이션) */
-    .item-cap { position:absolute; left:0; right:0; bottom:0; padding:26px 14px 12px; background:linear-gradient(to top, rgba(0,0,0,.74), rgba(0,0,0,.30) 55%, transparent); color:#fff; pointer-events:none; }
-    .item-cap .name { font-size:14.5px; font-weight:700; line-height:1.25; text-shadow:0 1px 3px rgba(0,0,0,.45); }
-    .item-cap .desc { font-size:11.5px; opacity:.9; margin-top:3px; line-height:1.35; text-shadow:0 1px 2px rgba(0,0,0,.45); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-    /* 이미지 없는 카드는 밝은 캡션 */
-    .item-card.no-img .item-cap { background:linear-gradient(to top, var(--card) 30%, transparent); color:var(--text); }
-    .item-card.no-img .item-cap .name { text-shadow:none; }
-    .item-card.no-img .item-cap .desc { text-shadow:none; opacity:.68; }
-
-    .badge-wrap { position:absolute; top:10px; left:10px; display:flex; gap:5px; flex-wrap:wrap; z-index:2; }
-    .badge { font-size:10px; font-weight:800; letter-spacing:.04em; background:var(--main); color:#fff; padding:3px 9px; border-radius:999px; box-shadow:0 2px 8px rgba(0,0,0,.25); }
-
-    .zoom-hint { position:absolute; top:10px; right:10px; width:28px; height:28px; border-radius:50%; background:rgba(0,0,0,.34); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0; transition:opacity var(--transition); z-index:2; }
-    .item-card:hover .zoom-hint { opacity:1; }
-
-    .empty { text-align:center; padding:56px 0; color:var(--text-soft); }
-    .empty-icon { font-size:44px; margin-bottom:10px; opacity:.5; }
-
-    /* ── 라이트박스 (클릭 확대) ── */
-    .lightbox { position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:600; padding:24px; }
+    .dress-head { display:flex; align-items:center; gap:9px; margin-bottom:6px; }
+    .dress-head .t { font-size:22px; font-weight:800; color:var(--main-dark); }
+    .dress-sub { font-size:13px; color:var(--text-soft); margin-bottom:16px; }
+    .cat-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+    .cat-tab { padding:9px 18px; border-radius:999px; border:1.5px solid var(--main-light); background:var(--card); color:var(--main-dark); font-size:14px; font-weight:600; cursor:pointer; transition:all var(--transition); }
+    .cat-tab.active { background:var(--main); color:#fff; border-color:var(--main); }
+    body.dark .cat-tab.active { color:#1a121c; }
+    .item-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    @media (max-width:900px){ .item-grid { grid-template-columns:repeat(3,1fr); } }
+    @media (max-width:560px){ .item-grid { grid-template-columns:repeat(2,1fr); gap:10px; } }
+    .item-card { background:var(--card); border:1.5px solid var(--main-light); border-radius:18px; overflow:hidden; cursor:pointer; transition:transform var(--transition), box-shadow var(--transition); }
+    .item-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-hover); }
+    .item-img { position:relative; width:100%; aspect-ratio:3/4; background:var(--bg); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .item-img img { width:100%; height:100%; object-fit:cover; }
+    .item-img .ph { font-size:32px; opacity:.4; }
+    .badge-wrap { position:absolute; top:8px; left:8px; display:flex; gap:4px; flex-wrap:wrap; }
+    .badge { font-size:10px; font-weight:700; background:var(--main); color:#fff; padding:2px 8px; border-radius:999px; }
+    body.dark .badge { color:#1a121c; }
+    .item-info { padding:12px 14px; }
+    .item-name { font-size:14px; font-weight:700; color:var(--text); }
+    .item-desc { font-size:12px; color:var(--text-soft); margin-top:4px; }
+    .empty { text-align:center; padding:50px 0; color:var(--text-soft); }
+    .empty-icon { font-size:40px; margin-bottom:10px; }
+    /* 라이트박스 (클릭 확대) */
+    .lightbox { position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; z-index:600; padding:20px; }
     .lightbox.open { display:flex; }
-    .lightbox .inner { display:flex; flex-direction:column; align-items:center; max-width:92%; max-height:90%; }
-    .lightbox img { max-width:100%; max-height:74vh; border-radius:14px; box-shadow:0 12px 50px rgba(0,0,0,.5); }
-    .lightbox-cap { margin-top:16px; text-align:center; color:#fff; }
-    .lightbox-cap .lb-name { font-size:17px; font-weight:700; }
-    .lightbox-cap .lb-desc { font-size:13.5px; opacity:.82; margin-top:5px; max-width:520px; line-height:1.5; }
-    .lightbox-close { position:absolute; top:18px; right:24px; color:#fff; font-size:36px; cursor:pointer; line-height:1; opacity:.85; }
-    .lightbox-close:hover { opacity:1; }
+    .lightbox img { max-width:90%; max-height:80%; border-radius:14px; }
+    .lightbox-cap { position:absolute; bottom:30px; left:0; right:0; text-align:center; color:#fff; font-size:15px; font-weight:600; }
+    .lightbox-close { position:absolute; top:20px; right:24px; color:#fff; font-size:34px; cursor:pointer; line-height:1; }
   </style>
 </head>
 <body>
 <nav class="nav"><div class="nav-inner">
-  <a href="../index.html" class="nav-logo"><span class="mini-badge"><i class="mc"></i></span> UHI</a>
+  <a href="../index.html" class="nav-logo">한자리</a>
   <a href="../index.html">프로필</a>
+  <a href="../notice/">공지</a>
   <a href="../schedule/">일정</a>
-  <a href="../song/">노래책</a>
-  <a href="index.html" class="active">옷장</a>
+  <a href="https://meloming.com/channel/hanjari" target="_blank" rel="noopener">노래책</a>
+  <a href="../diary/">일기</a>
   <a href="../work/">업보</a>
+  <a href="index.html" class="active">옷장</a>
   <button class="theme-switch" id="themeSwitch" type="button" aria-label="다크모드 전환"><span class="knob" id="themeKnob">🌙</span></button>
 </div></nav>
 
 <div class="container stagger">
   <div class="card">
-    <div class="dress-head"><span class="ico">👗</span><span class="t">옷장</span></div>
-    <div class="dress-sub">우히의 헤어 · 렌즈 · 의상 모음이에요. 이미지를 누르면 크게 볼 수 있어요</div>
+    <div class="dress-head"><span style="font-size:22px">👗</span><span class="t">옷장</span></div>
+    <div class="dress-sub">한자리의 헤어 · 렌즈 · 의상을 확인해요. 이미지를 누르면 크게 볼 수 있어요</div>
     <div class="cat-tabs" id="cat-tabs">
-      <button class="cat-tab active" data-cat="hair" onclick="filterCat('hair',this)">헤어 <span class="cnt">0</span></button>
-      <button class="cat-tab" data-cat="lens" onclick="filterCat('lens',this)">렌즈 <span class="cnt">0</span></button>
-      <button class="cat-tab" data-cat="outfit" onclick="filterCat('outfit',this)">의상 <span class="cnt">0</span></button>
+      <button class="cat-tab active" data-cat="hair" onclick="filterCat('hair',this)">헤어</button>
+      <button class="cat-tab" data-cat="lens" onclick="filterCat('lens',this)">렌즈</button>
+      <button class="cat-tab" data-cat="outfit" onclick="filterCat('outfit',this)">의상</button>
     </div>
     <div id="dress-body"><div class="spinner"></div></div>
   </div>
 </div>
-<footer style="margin-top:-48px; color:#9fc3d4; font-size:12.5px; line-height:1.8; text-align:center;">© 2026 우히 Official.<br>비즈니스 문의 · uhi1020118@gmail.com</footer>
+<footer>© 2026 HANJARI Official.<br>비즈니스 문의 · jh5200491@gmail.com</footer>
 
 <div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLb()">
   <span class="lightbox-close" onclick="closeLb()">×</span>
-  <div class="inner">
-    <img id="lb-img" src="" alt="">
-    <div class="lightbox-cap">
-      <div class="lb-name" id="lb-name"></div>
-      <div class="lb-desc" id="lb-desc"></div>
-    </div>
-  </div>
+  <img id="lb-img" src="" alt="">
+  <div class="lightbox-cap" id="lb-cap"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../supabase.js"></script>
 <script>
-  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   const LABELS = { hair:'헤어', lens:'렌즈', outfit:'의상' };
   let allItems = [];
   let curCat = 'hair';
@@ -112,49 +88,29 @@
       const { data } = await db.from('dress_items').select('*').order('sort_order').order('created_at');
       allItems = data || [];
     } catch(e) { allItems = []; }
-    updateCounts();
     render();
-  }
-
-  function updateCounts(){
-    document.querySelectorAll('.cat-tab').forEach(t=>{
-      const c = t.dataset.cat;
-      const n = allItems.filter(i => i.category === c).length;
-      const cnt = t.querySelector('.cnt');
-      if (cnt) cnt.textContent = n;
-    });
   }
 
   function render(){
     const body = document.getElementById('dress-body');
     const items = allItems.filter(i => i.category === curCat);
     if (!items.length){
-      body.innerHTML = '<div class="empty"><div class="empty-icon">👗</div>' + LABELS[curCat] + ' 항목이 아직 없어요</div>';
+      body.innerHTML = '<div class="empty"><div class="empty-icon">👗</div>' + LABELS[curCat] + ' 항목이 없어요</div>';
       return;
     }
-    body.innerHTML = '<div class="item-grid">' + items.map((item, idx) => {
+    body.innerHTML = '<div class="item-grid">' + items.map(item => {
       const badges = (item.badges||[]).map(b => `<span class="badge">${esc(b.label||b)}</span>`).join('');
-      const hasImg = !!item.image_url;
-      const inner = hasImg
-        ? `<img src="${esc(item.image_url)}" alt="${esc(item.name)}" loading="lazy">`
+      const img = item.image_url
+        ? `<img src="${item.image_url}" alt="${esc(item.name)}" loading="lazy">`
         : `<span class="ph">👗</span>`;
-      return `<div class="item-card${hasImg?'':' no-img'}" data-idx="${idx}">
-        ${badges?`<div class="badge-wrap">${badges}</div>`:''}
-        ${hasImg?'<div class="zoom-hint">⤢</div>':''}
-        ${inner}
-        <div class="item-cap">
-          <div class="name">${esc(item.name)}</div>
-          ${item.description?`<div class="desc">${esc(item.description)}</div>`:''}
+      return `<div class="item-card" onclick="lb('${item.image_url||''}','${esc(item.name)}')">
+        <div class="item-img">${badges?`<div class="badge-wrap">${badges}</div>`:''}${img}</div>
+        <div class="item-info">
+          <p class="item-name">${esc(item.name)}</p>
+          ${item.description?`<p class="item-desc">${esc(item.description)}</p>`:''}
         </div>
       </div>`;
     }).join('') + '</div>';
-
-    body.querySelectorAll('.item-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const it = items[+card.dataset.idx];
-        if (it && it.image_url) openLb(it);
-      });
-    });
   }
 
   function filterCat(cat, el){
@@ -164,12 +120,10 @@
     render();
   }
 
-  function openLb(item){
-    document.getElementById('lb-img').src = item.image_url;
-    document.getElementById('lb-name').textContent = item.name || '';
-    const d = document.getElementById('lb-desc');
-    d.textContent = item.description || '';
-    d.style.display = item.description ? 'block' : 'none';
+  function lb(src, cap){
+    if(!src) return;
+    document.getElementById('lb-img').src = src;
+    document.getElementById('lb-cap').textContent = cap;
     document.getElementById('lightbox').classList.add('open');
   }
   function closeLb(){ document.getElementById('lightbox').classList.remove('open'); }
