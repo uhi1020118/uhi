@@ -3,8 +3,8 @@
    ✅ 이 파일 상단 두 줄만 본인 값으로 교체!
    ============================================= */
 
-const SUPABASE_URL  = 'https://hyjfhbdptmondqcnflrz.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5amZoYmRwdG1vbmRxY25mbHJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MTg2OTIsImV4cCI6MjA5NzE5NDY5Mn0.cTnIrtw7_wR2YY1aru1Xx4nSEycVKATnxK8lqQIU6bs';
+const SUPABASE_URL  = 'https://lgkcwcjoxaztiyymndzu.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxna2N3Y2pveGF6dGl5eW1uZHp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTE4MjQsImV4cCI6MjA5Nzg2NzgyNH0.7V_3q7DPJmACnz0dWNrfQsNT99SUeVgv1qkx1G54j80';
 
 // ── Supabase 클라이언트 초기화 ──
 const { createClient } = supabase;
@@ -32,7 +32,7 @@ async function fetchAll(table, options = {}) {
  */
 async function insertRow(table, row) {
   const { error } = await db.from(table).insert(row);
-  if (error) { console.error(`insertRow(${table}) 오류:`, error); return false; }
+  if (error) { console.error(`insertRow(${table}) 오류:`, error); window.__dbErr = error.message; return false; }
   return true;
 }
 
@@ -41,7 +41,7 @@ async function insertRow(table, row) {
  */
 async function deleteRow(table, id) {
   const { error } = await db.from(table).delete().eq('id', id);
-  if (error) { console.error(`deleteRow(${table}) 오류:`, error); return false; }
+  if (error) { console.error(`deleteRow(${table}) 오류:`, error); window.__dbErr = error.message; return false; }
   return true;
 }
 
@@ -50,7 +50,7 @@ async function deleteRow(table, id) {
  */
 async function updateRow(table, id, updates) {
   const { error } = await db.from(table).update(updates).eq('id', id);
-  if (error) { console.error(`updateRow(${table}) 오류:`, error); return false; }
+  if (error) { console.error(`updateRow(${table}) 오류:`, error); window.__dbErr = error.message; return false; }
   return true;
 }
 
@@ -94,11 +94,11 @@ async function uploadImage(file, folder = 'uploads') {
     const blob = await compressImage(file);
     const rand = Math.random().toString(36).slice(2, 8);
     const path = `${folder}/${Date.now()}_${rand}.jpg`;
-    const { error } = await db.storage.from('uhi-img').upload(path, blob, {
+    const { error } = await db.storage.from('images').upload(path, blob, {
       upsert: true, contentType: 'image/jpeg'
     });
     if (error) { console.error('uploadImage 오류:', error); return null; }
-    const { data } = db.storage.from('uhi-img').getPublicUrl(path);
+    const { data } = db.storage.from('images').getPublicUrl(path);
     return data?.publicUrl || null;
   } catch (e) {
     console.error('uploadImage 예외:', e);
@@ -126,3 +126,8 @@ function initIframeResize() {
   send();
   new ResizeObserver(send).observe(document.body);
 }
+
+/* ─ 호환용 별칭 ─
+   일정/노래/일기/업보 페이지는 enableIframeAutoHeight() 라는 이름으로 호출합니다.
+   이 별칭이 없으면 그 페이지들에서 "함수 없음" 에러가 나고 iframe 높이가 자동조절되지 않습니다. */
+function enableIframeAutoHeight() { initIframeResize(); }

@@ -1,64 +1,65 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>우히 · 노래책</title>
-  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/10/1020118/1020118.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
-  <style>
-    .song-head { display:flex; align-items:center; gap:9px; margin-bottom:14px; }
-    .song-head .t { font-size:22px; font-weight:800; color:var(--main-dark); }
-    .filter-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:8px; }
-    .search-box { flex:1; min-width:200px; padding:12px 18px; border-radius:999px; border:1.5px solid var(--main-light); font-size:14px; outline:none; background:#fff; }
-    .search-box:focus { border-color:var(--main); }
-    .genre-tabs { display:flex; gap:6px; flex-wrap:wrap; }
-    .gt { padding:8px 15px; border-radius:999px; border:1.5px solid var(--main-light); background:#fff; color:var(--text-soft); font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
-    .gt.active { background:var(--main); color:#fff; border-color:var(--main); }
-    .count-line { font-size:13px; color:var(--text-soft); margin:14px 0 6px; }
-    table { width:100%; border-collapse:collapse; }
-    thead th { text-align:left; font-size:12px; font-weight:700; color:var(--main-dark); padding:10px 12px; background:#eef7fc; }
-    thead th:first-child { border-radius:8px 0 0 8px; } thead th:last-child { border-radius:0 8px 8px 0; }
-    tbody td { padding:13px 12px; border-bottom:1px solid var(--main-light); font-size:14px; color:var(--text); }
-    tbody tr:hover td { background:#eef7fc; }
-    .s-num { color:var(--text-soft); font-size:13px; width:36px; }
-    .s-title { font-weight:600; }
-    .s-genre { font-size:11px; background:var(--main-light); color:var(--main-dark); padding:3px 10px; border-radius:999px; white-space:nowrap; display:inline-block; }
-    .s-diff { display:inline-flex; gap:3px; }
-    .dot { width:8px; height:8px; border-radius:50%; background:var(--main-light); }
-    .dot.on { background:var(--main); }
-    .pagination { display:flex; justify-content:center; gap:6px; margin-top:16px; }
-    .pg { width:34px; height:34px; border-radius:50%; border:1.5px solid var(--main-light); background:#fff; color:var(--text-mid); font-size:13px; font-weight:600; cursor:pointer; }
-    .pg.active { background:var(--main); color:#fff; border-color:var(--main); }
-    body.dark thead th { background:#1b2a33; }
-    body.dark tbody tr:hover td { background:#1b2a33; }
-    body.dark .search-box { background:var(--card); color:var(--text); }
-    body.dark .pg { background:var(--card); color:var(--text); }
-    @media (max-width:560px){
-      .hide-m { display:none; }
-      thead th { padding:9px 8px; font-size:11px; }
-      tbody td { padding:11px 6px; font-size:13px; }
-      .s-num { width:24px; font-size:12px; }
-      .s-genre { font-size:10px; padding:2px 8px; }
-      .dot { width:7px; height:7px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우히 · 노래책</title>
+<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/10/1020118/1020118.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+  .search-box{flex:1;min-width:200px;padding:12px 18px;border-radius:999px;border:1.5px solid var(--rule);font-size:14px;outline:none;background:var(--bg);color:var(--text)}
+  .search-box:focus{border-color:var(--main)}
+  .genre-tabs{display:flex;gap:6px;flex-wrap:wrap}
+  .gt{padding:8px 15px;border-radius:999px;border:1.5px solid var(--rule);background:var(--card);color:var(--text-soft);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+  .gt:hover{border-color:var(--main)}
+  .gt.active{background:var(--main);color:#06384f;border-color:var(--main)}
+  body.dark .gt.active{color:#0b2230}
+  .count-line{font-size:13px;color:var(--text-soft);margin:14px 0 6px}
+  table{width:100%;border-collapse:collapse}
+  thead th{text-align:left;font-size:12px;font-weight:700;color:var(--main-dark);padding:10px 12px;background:var(--main-light)}
+  thead th:first-child{border-radius:8px 0 0 8px}thead th:last-child{border-radius:0 8px 8px 0}
+  tbody td{padding:13px 12px;border-bottom:1px solid var(--rule);font-size:14px;color:var(--text)}
+  tbody tr:hover td{background:var(--main-light)}
+  .s-num{color:var(--text-soft);font-size:13px;width:36px}
+  .s-title{font-weight:600;color:var(--ink)}
+  .s-genre{font-size:11px;background:var(--main-light);color:var(--main-dark);padding:3px 10px;border-radius:999px;white-space:nowrap;display:inline-block}
+  .s-diff{display:inline-flex;gap:3px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--main-light)}
+  .dot.on{background:var(--main-dark)}
+  .pagination{display:flex;justify-content:center;gap:6px;margin-top:16px;flex-wrap:wrap}
+  .pg{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--rule);background:var(--card);color:var(--text-mid);font-size:13px;font-weight:600;cursor:pointer}
+  .pg:hover{border-color:var(--main)}
+  .pg.active{background:var(--main);color:#06384f;border-color:var(--main)}
+  body.dark .pg.active{color:#0b2230}
+  @media(max-width:560px){
+    .hide-m{display:none}
+    thead th{padding:9px 8px;font-size:11px}
+    tbody td{padding:11px 6px;font-size:13px}
+    .s-num{width:24px;font-size:12px}.s-genre{font-size:10px;padding:2px 8px}.dot{width:7px;height:7px}
+  }
+</style>
 </head>
 <body>
+<div class="page">
 <nav class="nav"><div class="nav-inner">
-  <a href="../index.html" class="nav-logo"><span class="mini-badge"><i class="mc"></i></span> UHI</a>
-  <a href="../index.html">프로필</a>
-  <a href="../schedule/">일정</a>
-  <a href="index.html" class="active">노래책</a>
-  <a href="../dress/">옷장</a>
-  <a href="../work/">업보</a>
-  <button class="theme-switch" id="themeSwitch" type="button" aria-label="다크모드 전환"><span class="knob" id="themeKnob">🌙</span></button>
+  <a href="../index.html" class="nav-logo"><span class="lg-script">Uhi</span><span class="lg-sub">DAILY</span></a>
+  <a href="../index.html" class="pill">메인</a>
+  <a href="../profile/" class="pill">프로필</a>
+  <a href="../schedule/" class="pill">일정</a>
+  <a href="index.html" class="pill active">노래책</a>
+  <a href="../dress/" class="pill">옷장</a>
+  <a href="../work/" class="pill">업보</a>
+  <button class="theme-switch" id="tsw" type="button" aria-label="다크모드 전환"><span class="knob" id="kn">🌙</span></button>
 </div></nav>
+<div class="wrap">
 
-<div class="container stagger">
+  <div class="kicker"><span class="cat">SONGBOOK · 🎵</span><span class="date dbox"></span></div>
+  <h1 class="headline">노래책</h1>
+  <div class="byline">우히가 부를 수 있는 노래들이에요. 신청곡 고를 때 참고해요 💙</div>
+
   <div class="card">
-    <div class="song-head"><span style="font-size:22px">🎵</span><span class="t">노래책</span></div>
     <div class="filter-row">
       <input class="search-box" id="search" placeholder="🔍 곡명 · 아티스트 검색...">
     </div>
@@ -72,8 +73,11 @@
     </div>
     <div class="pagination" id="pagination"></div>
   </div>
+
 </div>
-<footer style="margin-top:-48px; color:#9fc3d4; font-size:12.5px; line-height:1.8; text-align:center;">© 2026 우히 Official.<br>비즈니스 문의 · uhi1020118@gmail.com</footer>
+
+</div><!-- /page -->
+<footer>© 2026 우히 Official.<br>비즈니스 문의 — uhi1020118@gmail.com</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../supabase.js"></script>
@@ -82,18 +86,16 @@
   const GENRES = ['전체','K-Pop','J-Pop','Pop','애교송','기타'];
   const PAGE = 30;
   let songs = [], curGenre = '전체', curPage = 1, keyword = '';
-
   async function init() {
     songs = await fetchAll('songs', { order: 'id', asc: true });
     renderGenres(); render();
-    enableIframeAutoHeight();
+    if (typeof enableIframeAutoHeight==='function') enableIframeAutoHeight();
   }
   function renderGenres() {
     document.getElementById('genre-tabs').innerHTML = GENRES.map(g =>
       `<button class="gt ${g===curGenre?'active':''}" onclick="selGenre('${g}')">${g}</button>`).join('');
   }
-  function selGenre(g){ curGenre=g; curPage=1; renderGenres(); render(); enableIframeAutoHeight(); }
-
+  function selGenre(g){ curGenre=g; curPage=1; renderGenres(); render(); if(typeof enableIframeAutoHeight==='function')enableIframeAutoHeight(); }
   function filtered() {
     return songs.filter(s => {
       const okG = curGenre==='전체' || s.genre===curGenre;
@@ -125,26 +127,18 @@
     const pg = document.getElementById('pagination'); pg.innerHTML='';
     if (totalPages>1) for(let i=1;i<=totalPages;i++){
       const b=document.createElement('button'); b.className='pg'+(i===curPage?' active':''); b.textContent=i;
-      b.onclick=()=>{ curPage=i; render(); enableIframeAutoHeight(); window.scrollTo(0,0); };
+      b.onclick=()=>{ curPage=i; render(); if(typeof enableIframeAutoHeight==='function')enableIframeAutoHeight(); window.scrollTo(0,0); };
       pg.appendChild(b);
     }
   }
-  document.getElementById('search').addEventListener('input', e=>{ keyword=e.target.value.trim(); curPage=1; render(); enableIframeAutoHeight(); });
+  document.getElementById('search').addEventListener('input', e=>{ keyword=e.target.value.trim(); curPage=1; render(); if(typeof enableIframeAutoHeight==='function')enableIframeAutoHeight(); });
   init();
+  (function(){var M=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];var t=new Date();var s=t.getFullYear()+' · '+M[t.getMonth()]+' '+t.getDate();document.querySelectorAll('.dbox').forEach(function(e){e.textContent=s});})();
 </script>
 <script>
-(function(){
-  if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-  var sw = document.getElementById('themeSwitch');
-  var knob = document.getElementById('themeKnob');
-  function refresh(){ if(knob) knob.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙'; }
-  if (sw) sw.addEventListener('click', function(){
-    document.body.classList.toggle('dark');
-    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    refresh();
-  });
-  refresh();
-})();
+(function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
 </script>
+<script>(function(){var r=function(){document.body.classList.add("ready")};if(document.readyState==="complete")r();else window.addEventListener("load",r);setTimeout(r,1200);})();</script>
+<script src="../fx.js"></script>
 </body>
 </html>
